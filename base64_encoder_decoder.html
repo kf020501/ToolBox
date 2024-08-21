@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL エンコーダー/デコーダー</title>
+</head>
+<body>
+    <h2>URL エンコーダー/デコーダー</h2>
+    
+    <div>
+        <textarea id="inputOutput" rows="4" cols="120" placeholder="ここにURLまたはテキストを入力してください..."></textarea><br>
+        <button onclick="encodeURL()">URLをエンコード</button>
+        <button onclick="decodeURL()">URLをデコード</button><br>
+        <textarea id="output" rows="4" cols="120" placeholder="結果がここに表示されます..."></textarea>
+    </div>
+
+    <script>
+        // 入力されたテキストをURLとしてエンコードする関数
+        function encodeURL() {
+            const inputText = document.getElementById("inputOutput").value;
+            const encodedURL = encodeURIComponent(inputText); // テキストをURLとしてエンコード
+            document.getElementById("output").value = encodedURL;
+        }
+
+        // URLエンコードされた文字列をテキストにデコードする関数
+        function decodeURL() {
+            const inputURL = document.getElementById("inputOutput").value;
+            try {
+                const decodedURL = decodeURIComponent(inputURL); // URLエンコードされた文字列をデコード
+                document.getElementById("output").value = decodedURL;
+            } catch (error) {
+                alert("無効なURL文字列です。");
+            }
+        }
+    </script>
+</body>
+</html>
