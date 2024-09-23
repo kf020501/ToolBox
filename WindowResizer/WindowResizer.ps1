@@ -21,7 +21,33 @@ Add-Type @"
     }
 "@
 
-Start-Sleep 1
+# 仮想キーコードの定義
+$VK_MENU = 0x12  # Altキー
+$VK_TAB = 0x09   # Tabキー
+$KEYEVENTF_KEYDOWN = 0x0000
+$KEYEVENTF_KEYUP = 0x0002
+
+# user32.dllのkeybd_event関数をインポート
+Add-Type -Namespace Win32 -Name Keyboard -MemberDefinition @"
+    [DllImport("user32.dll")]
+    public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
+"@
+
+# Altキーを押す
+[Win32.Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYDOWN, 0)
+Start-Sleep -Milliseconds 50  # 少し待機
+
+# Tabキーを押す
+[Win32.Keyboard]::keybd_event($VK_TAB, 0, $KEYEVENTF_KEYDOWN, 0)
+Start-Sleep -Milliseconds 50  # 少し待機
+
+# Tabキーを離す
+[Win32.Keyboard]::keybd_event($VK_TAB, 0, $KEYEVENTF_KEYUP, 0)
+Start-Sleep -Milliseconds 50  # 少し待機
+
+# Altキーを離す
+[Win32.Keyboard]::keybd_event($VK_MENU, 0, $KEYEVENTF_KEYUP, 0)
+Start-Sleep -Milliseconds 50
 
 # アクティブウィンドウを取得
 $hwnd = [WinAPI]::GetForegroundWindow()
