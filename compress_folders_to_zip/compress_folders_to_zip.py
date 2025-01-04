@@ -1,6 +1,10 @@
 import os
 import sys
 import zipfile
+from datetime import datetime
+
+# ZIPが対応可能な最も古い日時
+ZIP_MIN_TIMESTAMP = datetime(1980, 1, 1).timestamp()
 
 def compress_folder(folder_path):
     # フォルダの絶対パスを取得
@@ -18,7 +22,12 @@ def compress_folder(folder_path):
             for file in files:
                 file_path = os.path.join(root, file)
                 arcname = os.path.relpath(file_path, folder_path)
-                zipf.write(file_path, arcname)
+                try:
+                    zipf.write(file_path, arcname)
+                except ValueError:
+                    # タイムスタンプを1980年1月1日に設定
+                    os.utime(file_path, (ZIP_MIN_TIMESTAMP, ZIP_MIN_TIMESTAMP))
+                    zipf.write(file_path, arcname)
     print(f"Compressed '{folder_path}' to '{zip_path}'")
 
 if __name__ == "__main__":
