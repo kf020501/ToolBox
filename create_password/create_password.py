@@ -24,25 +24,19 @@ def generate_password(length: int) -> str:
     # 3. 数字と記号からそれぞれ1文字ずつ選択
     digit_char = random.choice(digits)
     symbol_char = random.choice(symbols)
-    
-    fixed_chars = [first_char, second_char, digit_char, symbol_char]
-    
+        
     # 4. 残りの文字数分、全グループからランダムに選ぶ
     extra_count = length - 4
     extra_chars = [random.choice(lower + upper + digits + symbols) for _ in range(extra_count)]
     
-    # 5. 全文字をリストにしてシャッフル
-    pwd_list = fixed_chars + extra_chars
+    # 5. 最初の1文字以外の文字をリストにしてシャッフル
+    pwd_list = [second_char, digit_char, symbol_char] + extra_chars
     random.shuffle(pwd_list)
     
-    # 6. 最終出力で最初の文字が必ずletterになるように調整
-    if pwd_list[0] not in (lower + upper):
-        for i, ch in enumerate(pwd_list):
-            if ch in (lower + upper):
-                pwd_list[0], pwd_list[i] = pwd_list[i], pwd_list[0]
-                break
+    # 6. 最初の一文字とシャッフルされた文字列を結合
+    pwd = first_char + ''.join(pwd_list)
 
-    return ''.join(pwd_list)
+    return pwd
 
 
 def get_interactive_input():
