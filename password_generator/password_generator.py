@@ -1,4 +1,23 @@
 #!/usr/bin/env python3
+"""
+パスワード生成ツール
+任意の個数・長さのパスワードを生成します。
+引数なしで実行した場合、対話モードで起動します。
+
+使い方:
+password_generator.py [長さ(文字数)] [個数]
+  長さ: 生成するパスワードの文字数 (デフォルト: 10)
+  個数: 作成するパスワードの個数 (デフォルト: 1)
+
+例:
+  $ python ./password_generator.py
+    対話式モードで実行し、プロンプトに従って値を入力
+  $ python ./password_generator.py 12
+    文字数12、個数1で生成
+  $ python ./password_generator.py 16 5
+    文字数16、5個のパスワードを生成
+"""
+
 import sys
 import random
 
@@ -12,28 +31,28 @@ def generate_password(length: int) -> str:
     if length < 4:
         raise ValueError("パスワードの長さは最低でも4文字必要です。")
     
-    # 1. 最初の1文字は lower+upper から選択
+    # 最初の1文字は lower+upper から選択
     first_char = random.choice(lower + upper)
     
-    # 2. もう一方の大文字/小文字を選択（必ず両方含むため）
+    # もう一方の大文字/小文字を選択（必ず両方含むため）
     if first_char in lower:
         second_char = random.choice(upper)
     else:
         second_char = random.choice(lower)
     
-    # 3. 数字と記号からそれぞれ1文字ずつ選択
+    # 数字と記号からそれぞれ1文字ずつ選択
     digit_char = random.choice(digits)
     symbol_char = random.choice(symbols)
         
-    # 4. 残りの文字数分、全グループからランダムに選ぶ
+    # 残りの文字数分、全グループからランダムに選ぶ
     extra_count = length - 4
     extra_chars = [random.choice(lower + upper + digits + symbols) for _ in range(extra_count)]
     
-    # 5. 最初の1文字以外の文字をリストにしてシャッフル
+    # 最初の1文字以外の文字をリストにしてシャッフル
     pwd_list = [second_char, digit_char, symbol_char] + extra_chars
     random.shuffle(pwd_list)
     
-    # 6. 最初の一文字とシャッフルされた文字列を結合
+    # 最初の一文字とシャッフルされた文字列を結合
     pwd = first_char + ''.join(pwd_list)
 
     return pwd
@@ -47,6 +66,7 @@ def get_interactive_input():
     except ValueError:
         print("整数を入力してください。")
         sys.exit(1)
+
     try:
         inp = input("作成するパスワードの個数を入力してください [default: 1]: ")
         count = int(inp) if inp.strip() != "" else 1
