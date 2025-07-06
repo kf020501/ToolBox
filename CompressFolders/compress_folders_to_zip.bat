@@ -13,4 +13,5 @@ GOTO loop
 :runScript
 python "%ScriptPath%" %Args%
 
-PAUSE
+echo Process completed. The window will close in 20 seconds...
+timeout /t 20 /nobreak > nul
