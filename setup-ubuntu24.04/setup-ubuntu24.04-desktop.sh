@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
+if [[ $EUID -ne 0 ]]; then
+  echo "このスクリプトは root または sudo で実行してください。"
+  exit 1
+fi
+
 # ===== 関数 =====
 # パッケージがインストールされていなければAPTでインストールする
 install_if_missing() {
@@ -39,5 +44,32 @@ sudo ufw status
 # ===== SSHD =====
 install_if_missing openssh-server
 enable_and_start_service ssh
+
+
+# ===== 日本語化パッケージ =====
+# 日本語リポジトリの追加
+if [ ! -f /etc/apt/sources.list.d/ubuntu-ja.sources ]; then
+    echo "[INFO] Adding Japanese repository..."
+    wget https://www.ubuntulinux.jp/sources.list.d/noble.sources -O /etc/apt/sources.list.d/ubuntu-ja.sources
+    sudo apt-get update -y
+fi
+
+# 日本語パッケージのインストール
+install_if_missing ubuntu-defaults-ja
+
+# ===== VS Code =====
+# VS Codeがインストールされていなければインストール
+if ! command -v code >/dev/null 2>&1; then
+    echo "[INFO] Installing VS Code..."
+    # Microsoft GPGキーの追加
+    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+    sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+    # VS Codeリポジトリの追加
+    sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+    sudo apt-get update -y
+    sudo apt-get install -y code
+else
+    echo "[INFO] VS Code already installed. Skipping."
+fi
 
 echo "[INFO] Setup completed successfully!"

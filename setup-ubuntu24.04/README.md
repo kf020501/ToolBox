@@ -5,6 +5,7 @@
 ## ファイル
 
 - `setup-ubuntu24.04.sh` - Ubuntu 24.04用のDockerとGit環境セットアップスクリプト
+- `setup-ubuntu24.04-desktop.sh` - Ubuntu 24.04デスクトップ用セットアップスクリプト（UFW、SSH、日本語化、VS Code含む）
 - `setup-windows10-swl2.ps1` - Windows 10/11でWSL2 + Ubuntu 24.04を自動セットアップするPowerShellスクリプト
 
 ## 使用方法
@@ -12,13 +13,16 @@
 ### Ubuntu 24.04
 
 ```bash
-# ufwとsshdが必要な場合
-curl -fsSL https://raw.github.com/kf020501/ToolBox/main/setup-ubuntu24.04/setup-ubuntu24.04-desktop.sh | sudp bash
+# デスクトップ環境（UFW、SSH、日本語化、VS Code含む）
+curl -fsSL https://raw.github.com/kf020501/ToolBox/main/setup-ubuntu24.04/setup-ubuntu24.04-desktop.sh | sudo bash
 
-curl -fsSL https://raw.github.com/kf020501/ToolBox/main/setup-ubuntu24.04/setup-ubuntu24.04.sh | sudp bash
+# サーバー環境（Docker、Git、Make）
+curl -fsSL https://raw.github.com/kf020501/ToolBox/main/setup-ubuntu24.04/setup-ubuntu24.04.sh | sudo bash
 ```
 
-Docker、Git、Makeがインストールされ、現在のユーザーがdockerグループに追加されます。
+**デスクトップ版**: UFW、OpenSSH Server、日本語化パッケージ、VS Codeがインストールされます。
+
+**サーバー版**: Docker、Git、Makeがインストールされ、現在のユーザーがdockerグループに追加されます。
 
 ### Windows 10/11
 
