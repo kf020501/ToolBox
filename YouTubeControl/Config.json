@@ -1,0 +1,11 @@
+{
+  "hostsPath": "C:/Windows/System32/drivers/etc/hosts",
+  "hostsBackup": "C:/Windows/System32/drivers/etc/hosts.bak",
+  "markerStart": "# === YouTube BLOCK START ===",
+  "markerEnd": "# === YouTube BLOCK END ===",
+  "blockDomains": [
+    "youtube.com",
+    "www.youtube.com"
+  ],
+  "allowMinutes": 30
+}
