@@ -1,0 +1,4 @@
+id,value,flag,comment
+1,123,true,null
+2,"123",false,"hello,world"
+3,3.14,true,"pi"

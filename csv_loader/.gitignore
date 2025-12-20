@@ -1,0 +1,16 @@
+# 一時ファイルとログファイルを無視
+/logs/
+*.log
+*.tmp
+*.swp
+
+# Python関連の無視
+__pycache__/
+.pytest_cache/
+.venv
+*.pyc
+.coverage
+
+# 生成AIの出力ファイルを無視
+.claude/
+CLAUDE.md
