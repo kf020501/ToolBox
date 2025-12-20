@@ -90,7 +90,15 @@ def _load_csv_matrix_text_io(
         return [], []
 
     # ヘッダの作成
-    headers = _parse_csv_line(lines[0])
+    raw_headers = _parse_csv_line(lines[0])
+    headers: list[str] = []
+    for raw in raw_headers:
+        if not (raw.startswith('"') and raw.endswith('"') and len(raw) >= 2):
+            raise ValueError(f"header must be double-quoted: {raw}")
+        parsed = _parse_cell(raw)
+        if not isinstance(parsed, str):
+            raise ValueError(f"header must be string literal: {raw}")
+        headers.append(parsed)
 
     # データ行の作成
     rows: list[list[object]] = []

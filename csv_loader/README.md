@@ -12,7 +12,7 @@ CSVの各セルは JSON リテラルとして記載します（`json.loads()` �
 ## 記載例
 
 ```csv
-id,value,flag,comment
+"id","value","flag","comment"
 1,123,true,null
 2,"123",false,"hello,world"
 3,,true,"empty-cell-is-null"
