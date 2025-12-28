@@ -61,67 +61,71 @@ if (-not (Test-Path $hostsPath)) {
     exit 1
 }
 
-# 2) バックアップファイルが既に存在する場合は警告
+# 2) バックアップファイルが既に存在するかチェック
+$alreadyUnblocked = $false
 if (Test-Path $hostsBackup) {
+    $alreadyUnblocked = $true
     $msg = "既に YouTube ブロックは解除されています。（バックアップファイルが存在します）"
     Write-Host $msg -ForegroundColor Yellow
     Write-Log $msg "WARN"
-    exit 0
 }
 
-# 3) 元ファイルを hosts.bak にリネーム（バックアップ）
-try {
-    Rename-Item -Path $hostsPath -NewName "hosts.bak" -ErrorAction Stop
-    Write-Log "hosts を hosts.bak にリネームしました（バックアップ）。"
-} catch {
-    $msg = "hosts のリネームに失敗しました: $_"
-    Write-Host $msg -ForegroundColor Red
-    Write-Log $msg "ERROR"
-    exit 1
-}
-
-# 4) バックアップファイルからブロックセクションを削除した内容を新しい hosts として配置
-$content = Get-Content $hostsBackup -Raw -ErrorAction Stop
-
-$startIndex = $content.IndexOf($markerStart, [System.StringComparison]::Ordinal)
-$endIndex   = -1
-if ($startIndex -ge 0) {
-    $endIndex = $content.IndexOf($markerEnd, $startIndex, [System.StringComparison]::Ordinal)
-}
-
-if ($startIndex -ge 0 -and $endIndex -ge 0) {
-    $endIndex += $markerEnd.Length
-
-    # マーカー直後の連続した改行も削除
-    while ($endIndex -lt $content.Length -and ($content[$endIndex] -eq "`n" -or $content[$endIndex] -eq "`r")) {
-        $endIndex++
-    }
-
-    $newContent = $content.Remove($startIndex, $endIndex - $startIndex)
-
-    if ([string]::IsNullOrWhiteSpace($newContent)) {
-        $msg = "除去後の hosts 内容が空のため書き込みを中止しました。"
-        Write-Host $msg -ForegroundColor Yellow
+# 3) バックアップファイルがまだ存在しない場合のみ hosts ファイルを操作
+if (-not $alreadyUnblocked) {
+    # 元ファイルを hosts.bak にリネーム（バックアップ）
+    try {
+        Rename-Item -Path $hostsPath -NewName "hosts.bak" -ErrorAction Stop
+        Write-Log "hosts を hosts.bak にリネームしました（バックアップ）。"
+    } catch {
+        $msg = "hosts のリネームに失敗しました: $_"
+        Write-Host $msg -ForegroundColor Red
         Write-Log $msg "ERROR"
-        # バックアップを元に戻す
-        Rename-Item -Path $hostsBackup -NewName "hosts" -ErrorAction SilentlyContinue
         exit 1
     }
 
-    Set-Content -Path $hostsPath -Value $newContent -Encoding ASCII
+    # 4) バックアップファイルからブロックセクションを削除した内容を新しい hosts として配置
+    $content = Get-Content $hostsBackup -Raw -ErrorAction Stop
 
-    ipconfig /flushdns | Out-Null
+    $startIndex = $content.IndexOf($markerStart, [System.StringComparison]::Ordinal)
+    $endIndex   = -1
+    if ($startIndex -ge 0) {
+        $endIndex = $content.IndexOf($markerEnd, $startIndex, [System.StringComparison]::Ordinal)
+    }
 
-    Write-Host "YouTube ブロックを解除しました。"
-    Write-Log "YouTube ブロックセクションを削除した hosts を配置しました。"
-} else {
-    # ブロックセクションがない場合は、そのままコピー
-    Copy-Item -Path $hostsBackup -Destination $hostsPath -Force
-    ipconfig /flushdns | Out-Null
+    if ($startIndex -ge 0 -and $endIndex -ge 0) {
+        $endIndex += $markerEnd.Length
 
-    $msg = "ブロックセクションが見つかりませんでした。元のファイルをそのまま配置しました。"
-    Write-Host $msg
-    Write-Log $msg "WARN"
+        # マーカー直後の連続した改行も削除
+        while ($endIndex -lt $content.Length -and ($content[$endIndex] -eq "`n" -or $content[$endIndex] -eq "`r")) {
+            $endIndex++
+        }
+
+        $newContent = $content.Remove($startIndex, $endIndex - $startIndex)
+
+        if ([string]::IsNullOrWhiteSpace($newContent)) {
+            $msg = "除去後の hosts 内容が空のため書き込みを中止しました。"
+            Write-Host $msg -ForegroundColor Yellow
+            Write-Log $msg "ERROR"
+            # バックアップを元に戻す
+            Rename-Item -Path $hostsBackup -NewName "hosts" -ErrorAction SilentlyContinue
+            exit 1
+        }
+
+        Set-Content -Path $hostsPath -Value $newContent -Encoding ASCII
+
+        ipconfig /flushdns | Out-Null
+
+        Write-Host "YouTube ブロックを解除しました。"
+        Write-Log "YouTube ブロックセクションを削除した hosts を配置しました。"
+    } else {
+        # ブロックセクションがない場合は、そのままコピー
+        Copy-Item -Path $hostsBackup -Destination $hostsPath -Force
+        ipconfig /flushdns | Out-Null
+
+        $msg = "ブロックセクションが見つかりませんでした。元のファイルをそのまま配置しました。"
+        Write-Host $msg
+        Write-Log $msg "WARN"
+    }
 }
 
 # 2) 指定時間後に再ブロックするタスクを登録
