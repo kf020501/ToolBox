@@ -10,7 +10,7 @@ Write-Host "==================================================" -ForegroundColor
 Write-Host ""
 
 # 仮想環境の存在確認
-if (-not (Test-Path "venv")) {
+if (-not (Test-Path ".venv")) {
     Write-Host "✗ 仮想環境が見つかりません" -ForegroundColor Red
     Write-Host ""
     Write-Host "最初にセットアップを実行してください:" -ForegroundColor Yellow
@@ -31,7 +31,7 @@ if (-not (Test-Path "src\main.py")) {
 # 仮想環境をアクティベート
 Write-Host "仮想環境をアクティベートしています..." -ForegroundColor Yellow
 try {
-    & ".\venv\Scripts\Activate.ps1"
+    & ".\.venv\Scripts\Activate.ps1"
     Write-Host "✓ 仮想環境がアクティベートされました" -ForegroundColor Green
 } catch {
     Write-Host "✗ 仮想環境のアクティベートに失敗しました" -ForegroundColor Red

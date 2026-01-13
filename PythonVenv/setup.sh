@@ -27,13 +27,13 @@ fi
 
 # 既存のvenv削除確認
 SKIP_VENV_CREATION=false
-if [ -d "venv" ]; then
+if [ -d ".venv" ]; then
     echo ""
     echo "[2/4] 既存の仮想環境が見つかりました"
     read -p "  既存の仮想環境を削除して再作成しますか? (y/N): " response
     if [[ "$response" =~ ^[yY]$ ]]; then
         echo "  既存の仮想環境を削除しています..."
-        rm -rf venv
+        rm -rf .venv
         echo "  削除完了"
     else
         echo "  既存の仮想環境を使用します"
@@ -46,7 +46,7 @@ fi
 
 # 仮想環境の作成
 if [ "$SKIP_VENV_CREATION" = false ]; then
-    if $PYTHON_CMD -m venv venv; then
+    if $PYTHON_CMD -m venv .venv; then
         echo "  仮想環境の作成が完了しました"
     else
         echo "  仮想環境の作成に失敗しました"
@@ -57,8 +57,8 @@ fi
 # 仮想環境のアクティベート
 echo ""
 echo "[3/4] 仮想環境をアクティベートしています..."
-if [ -f "venv/bin/activate" ]; then
-    source venv/bin/activate
+if [ -f ".venv/bin/activate" ]; then
+    source .venv/bin/activate
     echo "  仮想環境がアクティベートされました"
 else
     echo "  仮想環境のアクティベートに失敗しました"
@@ -93,6 +93,6 @@ echo "=================================================="
 echo ""
 echo "次のステップ:"
 echo "  1. アプリケーションを実行: ./run.sh"
-echo "  2. 手動で仮想環境に入る: source venv/bin/activate"
+echo "  2. 手動で仮想環境に入る: source .venv/bin/activate"
 echo "  3. 仮想環境を終了: deactivate"
 echo ""

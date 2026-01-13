@@ -11,7 +11,7 @@ echo "=================================================="
 echo ""
 
 # 仮想環境の存在確認
-if [ ! -d "venv" ]; then
+if [ ! -d ".venv" ]; then
     echo "仮想環境が見つかりません"
     echo ""
     echo "最初にセットアップを実行してください:"
@@ -31,8 +31,8 @@ fi
 
 # 仮想環境をアクティベート
 echo "仮想環境をアクティベートしています..."
-if [ -f "venv/bin/activate" ]; then
-    source venv/bin/activate
+if [ -f ".venv/bin/activate" ]; then
+    source .venv/bin/activate
     echo "仮想環境がアクティベートされました"
 else
     echo "仮想環境のアクティベートに失敗しました"

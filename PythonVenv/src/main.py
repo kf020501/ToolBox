@@ -6,6 +6,8 @@
 import sys
 from pathlib import Path
 
+import uuid6
+
 
 def main():
     """メイン関数"""

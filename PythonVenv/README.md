@@ -8,7 +8,7 @@ Pythonの仮想環境（venv）を使用した開発環境テンプレートで�
 PythonVenv/
 ├── src/
 │   └── main.py          # メインプログラム
-├── venv/                # 仮想環境（自動生成、gitignore対象）
+├── .venv/               # 仮想環境（自動生成、gitignore対象）
 ├── requirements.txt     # 依存パッケージリスト
 ├── setup.ps1            # セットアップスクリプト（Windows用）
 ├── run.ps1              # 実行スクリプト（Windows用）
@@ -35,7 +35,7 @@ PythonVenv/
 **手動で仮想環境を操作**
 ```powershell
 # 仮想環境に入る
-.\venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1
 
 # 仮想環境を終了
 deactivate
@@ -61,7 +61,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 **手動で仮想環境を操作**
 ```bash
 # 仮想環境に入る
-source venv/bin/activate
+source .venv/bin/activate
 
 # 仮想環境を終了
 deactivate
@@ -72,8 +72,8 @@ deactivate
 **方法1: 手動でインストール**
 ```bash
 # 仮想環境に入る
-source venv/bin/activate  # Linux/Mac
-.\venv\Scripts\Activate.ps1  # Windows
+source .venv/bin/activate  # Linux/Mac
+.\.venv\Scripts\Activate.ps1  # Windows
 
 # パッケージをインストール
 pip install パッケージ名

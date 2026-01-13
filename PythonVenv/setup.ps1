@@ -20,13 +20,13 @@ try {
 }
 
 # 既存のvenv削除確認
-if (Test-Path "venv") {
+if (Test-Path ".venv") {
     Write-Host ""
     Write-Host "[2/4] 既存の仮想環境が見つかりました" -ForegroundColor Yellow
     $response = Read-Host "  既存の仮想環境を削除して再作成しますか? (y/N)"
     if ($response -eq "y" -or $response -eq "Y") {
         Write-Host "  既存の仮想環境を削除しています..." -ForegroundColor Yellow
-        Remove-Item -Recurse -Force venv
+        Remove-Item -Recurse -Force .venv
         Write-Host "  ✓ 削除完了" -ForegroundColor Green
     } else {
         Write-Host "  既存の仮想環境を使用します" -ForegroundColor Green
@@ -40,7 +40,7 @@ if (Test-Path "venv") {
 # 仮想環境の作成
 if (-not $skipVenvCreation) {
     try {
-        python -m venv venv
+        python -m venv .venv
         Write-Host "  ✓ 仮想環境の作成が完了しました" -ForegroundColor Green
     } catch {
         Write-Host "  ✗ 仮想環境の作成に失敗しました" -ForegroundColor Red
@@ -53,7 +53,7 @@ if (-not $skipVenvCreation) {
 Write-Host ""
 Write-Host "[3/4] 仮想環境をアクティベートしています..." -ForegroundColor Yellow
 try {
-    & ".\venv\Scripts\Activate.ps1"
+    & ".\.venv\Scripts\Activate.ps1"
     Write-Host "  ✓ 仮想環境がアクティベートされました" -ForegroundColor Green
 } catch {
     Write-Host "  ✗ 仮想環境のアクティベートに失敗しました" -ForegroundColor Red
@@ -92,6 +92,6 @@ Write-Host "==================================================" -ForegroundColor
 Write-Host ""
 Write-Host "次のステップ:" -ForegroundColor Cyan
 Write-Host "  1. アプリケーションを実行: .\run.ps1" -ForegroundColor White
-Write-Host "  2. 手動で仮想環境に入る: .\venv\Scripts\Activate.ps1" -ForegroundColor White
+Write-Host "  2. 手動で仮想環境に入る: .\.venv\Scripts\Activate.ps1" -ForegroundColor White
 Write-Host "  3. 仮想環境を終了: deactivate" -ForegroundColor White
 Write-Host ""
