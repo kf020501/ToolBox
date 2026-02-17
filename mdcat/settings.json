@@ -1,0 +1,9 @@
+{
+  "extensions": [
+    ".py",
+    ".txt",
+    ".md",
+    ".json"
+  ],
+  "code_fence": "```"
+}
