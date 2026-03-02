@@ -1,7 +1,8 @@
 # CSVフォーマット仕様（JSONリテラル）
 
 CSVの各セルは JSON リテラルとして記載します（`json.loads()` で解釈できること）。
-例外として、CSV上で空セル（値なし、または `""`）となる場合は `null` とみなします（Pythonでは `None`）。
+例外として、CSV上で空セル（値なし）の場合は `null` とみなします（Pythonでは `None`）。
+`""` は空文字として扱います。
 
 ## ルール
 
@@ -16,7 +17,7 @@ CSVの各セルは JSON リテラルとして記載します（`json.loads()` �
 1,123,true,null
 2,"123",false,"hello,world"
 3,,true,"empty-cell-is-null"
-4,"",false,"also-null"
+4,"",false,"empty-string"
 ```
 
 ## メソッド呼び出し関係（CSV → 2次元配列 → List[Dict]）

@@ -30,11 +30,11 @@ def test_empty_cells_are_null():
     print(list_dict)
     assert rows == [
         [1, None, True, "empty-cell-is-null"],
-        [2, None, False, "also-null"],
+        [2, "", False, "empty-string"],
     ]
     assert list_dict == [
         {"id": 1, "value": None, "flag": True, "comment": "empty-cell-is-null"},
-        {"id": 2, "value": None, "flag": False, "comment": "also-null"},
+        {"id": 2, "value": "", "flag": False, "comment": "empty-string"},
     ]
 
 

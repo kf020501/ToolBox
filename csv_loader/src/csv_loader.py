@@ -1,6 +1,13 @@
 import json
 from typing import TextIO
 
+# 概要: CSVの各セルをJSONリテラルとして解釈し、Python型に変換するユーティリティ。
+# 値なしセル(,,)はNone。その他はjson.loadsで解釈し、"..."は文字列になる。
+# 例: true/false/null が使える。""で囲まない数値はint/float扱い。
+# 使い方:
+#   headers, rows = csv_to_matrix("path/to/file.csv")
+#   list_dict = matrix_to_list_dict(headers, rows)
+
 def _parse_csv_line(line: str) -> list[str]:
     """
     CSV の1行をセル配列に分割する。
@@ -59,8 +66,8 @@ def _parse_cell(raw: str) -> object:
     Returns:
         JSON 解釈後の Python 型の値
     """
-    # 空セル特例: , , または "" は None として扱う。
-    if raw == "" or raw == '""':
+    # 空セル特例: 値なし (,,) は None として扱う。
+    if raw == "":
         return None
 
     if raw.startswith('"') and raw.endswith('"') and len(raw) >= 2:
